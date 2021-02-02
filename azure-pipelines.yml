@@ -30,7 +30,7 @@ jobs:
       testResultsFiles: '**/TEST-*.xml'
       tasks: '-p android clean :app:assembleExperimentalFossRelease'
   - script: |
-      find . -type f -name "*.apk" | xargs -I % mv % $(Build.SourcesDirectory)/mueller-chat.apk
+      find . -type f -name "*.apk" | xargs -I § mv § $(Build.SourcesDirectory)/mueller-chat.apk
       echo "Zipaligning apk"
       $ANDROID_HOME/build-tools/30.0.3/zipalign -p 4 $(Build.SourcesDirectory)/mueller-chat.apk $(Build.SourcesDirectory)/mueller-chat.aligned.apk
       echo "Verifying zipaligning apk"
