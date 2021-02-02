@@ -1,0 +1,85 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'macOS-latest'
+jobs:
+- job:
+  displayName: "Build Android App"
+  steps:
+  - checkout: self
+  - task: DownloadSecureFile@1
+    name: keyStore
+    displayName: 'Download keyStore'
+    inputs:
+      secureFile: 'my-upload-key.keystore'
+  - script: |
+      cp $(keyStore.secureFilePath) $(Build.SourcesDirectory)/android/app/my-upload-key.keystore
+      ls -la ./android/app/
+  - script: yarn install
+  - task: Gradle@2
+    displayName: "Build apk"
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'android/gradlew'
+      gradleOptions: '-Xmx3072m'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.8'
+      jdkArchitectureOption: 'x64'
+      publishJUnitResults: true
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: '-p android clean :app:assembleExperimentalFossRelease'
+  - script: |
+      find . -type f -name "*.apk" | xargs -I % mv % $(Build.SourcesDirectory)/mueller-chat.apk
+      echo "Zipaligning apk"
+      $ANDROID_HOME/build-tools/30.0.3/zipalign -p 4 $(Build.SourcesDirectory)/mueller-chat.apk $(Build.SourcesDirectory)/mueller-chat.aligned.apk
+      echo "Verifying zipaligning apk"
+      $ANDROID_HOME/build-tools/30.0.3/zipalign -c 4 $(Build.SourcesDirectory)/mueller-chat.aligned.apk
+      echo "Signing apk"
+      java -jar $ANDROID_HOME/build-tools/30.0.3/lib/apksigner.jar sign --out $(Build.SourcesDirectory)/mueller-chat.signed.apk --ks $(Build.SourcesDirectory)/android/app/my-upload-key.keystore --ks-key-alias my-key-alias --ks-pass pass:sunshine --key-pass pass:sunshine $(Build.SourcesDirectory)/mueller-chat.aligned.apk
+      echo "Verifying sgining apk"
+      java -jar $ANDROID_HOME/build-tools/30.0.3/lib/apksigner.jar verify $(Build.SourcesDirectory)/mueller-chat.signed.apk
+  - task: CopyFiles@2
+    displayName: "Copy apk to build artifacts folder."
+    inputs:
+      SourceFolder: $(Build.SourcesDirectory)
+      contents: '**/*.signed.apk'
+      targetFolder: '$(Build.artifactStagingDirectory)'
+      overWrite: true
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: android-artifacts
+- job:
+  displayName: "Build iOS App"
+  steps:
+  - checkout: self
+  - script: yarn install
+  - script: |
+      cd ios
+      /usr/local/bin/pod install
+#  - task: InstallAppleCertificate@2
+#    inputs:
+#      certSecureFile: 'chrisid_iOSDev_Nov2018.p12'
+#      certPwd: $(P12Password)
+#  - task: InstallAppleProvisioningProfile@1
+#    inputs:
+#      provProfileSecureFile: '6ffac825-ed27-47d0-8134-95fcf37a666c.mobileprovision'
+  - task: Xcode@5
+    inputs:
+      actions: 'build'
+      scheme: 'RocketChat'
+      sdk: 'iphoneos'
+      configuration: 'Release'
+      xcWorkspacePath: 'ios/RocketChatRN.xcworkspace'
+      xcodeVersion: 'default' # Options: 8, 9, 10, default, specifyPath
+      signingOption: 'nosign' # Options: nosign, default, manual, auto - signing requires Push notifications certificate from the apple app store
+      useXcpretty: 'false' # Makes it easier to diagnose build failures
+  - task: CopyFiles@2
+    inputs:
+      contents: '**/*.ipa'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: ios-artifacts
