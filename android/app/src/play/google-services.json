@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "638899535305",
+    "project_id": "mueller-rocketchat-app",
+    "storage_bucket": "mueller-rocketchat-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638899535305:android:03232f306cab82a56efc18",
+        "android_client_info": {
+          "package_name": "de.mueller.rocketchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638899535305-ja6dsuv0dj1r9bv0tcujb1hm6gnajg58.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiOpEFsehLDa2nf65HAcWTH74SUvhzikY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638899535305-ja6dsuv0dj1r9bv0tcujb1hm6gnajg58.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
