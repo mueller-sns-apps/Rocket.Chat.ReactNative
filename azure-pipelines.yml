@@ -50,40 +50,40 @@ jobs:
     inputs:
       pathtoPublish: '$(Build.ArtifactStagingDirectory)'
       artifactName: android-artifacts
-- job:
-  displayName: "Build iOS App"
-  steps:
-  - checkout: self
-  - script: yarn install
-  - script: |
-      cd ios
-      /usr/local/bin/pod install
-#  - task: InstallAppleCertificate@2
+#- job:
+#  displayName: "Build iOS App"
+#  steps:
+#  - checkout: self
+#  - script: yarn install
+#  - script: |
+#      cd ios
+#      /usr/local/bin/pod install
+##  - task: InstallAppleCertificate@2
+##    inputs:
+##      certSecureFile: 'chrisid_iOSDev_Nov2018.p12'
+##      certPwd: $(P12Password)
+##  - task: InstallAppleProvisioningProfile@1
+##    inputs:
+##      provProfileSecureFile: '6ffac825-ed27-47d0-8134-95fcf37a666c.mobileprovision'
+#  - task: Xcode@5
 #    inputs:
-#      certSecureFile: 'chrisid_iOSDev_Nov2018.p12'
-#      certPwd: $(P12Password)
-#  - task: InstallAppleProvisioningProfile@1
+#      actions: 'build'
+#      scheme: 'RocketChat'
+#      sdk: 'iphoneos'
+#      configuration: 'Release'
+#      xcWorkspacePath: 'ios/RocketChatRN.xcworkspace'
+#      xcodeVersion: 'default' # Options: 8, 9, 10, default, specifyPath
+#      signingOption: 'nosign' # Options: nosign, default, manual, auto - signing requires Push notifications certificate from the apple app store
+#      useXcpretty: 'false' # Makes it easier to diagnose build failures
+#  - task: CopyFiles@2
 #    inputs:
-#      provProfileSecureFile: '6ffac825-ed27-47d0-8134-95fcf37a666c.mobileprovision'
-  - task: Xcode@5
-    inputs:
-      actions: 'build'
-      scheme: 'RocketChat'
-      sdk: 'iphoneos'
-      configuration: 'Release'
-      xcWorkspacePath: 'ios/RocketChatRN.xcworkspace'
-      xcodeVersion: 'default' # Options: 8, 9, 10, default, specifyPath
-      signingOption: 'nosign' # Options: nosign, default, manual, auto - signing requires Push notifications certificate from the apple app store
-      useXcpretty: 'false' # Makes it easier to diagnose build failures
-  - task: CopyFiles@2
-    inputs:
-      contents: '**/*.ipa'
-      targetFolder: '$(Build.ArtifactStagingDirectory)'
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      artifactName: ios-artifacts
-
+#      contents: '**/*.ipa'
+#      targetFolder: '$(Build.ArtifactStagingDirectory)'
+#  - task: PublishBuildArtifacts@1
+#    inputs:
+#      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+#      artifactName: ios-artifacts
+#
 
 
 # https://dev.azure.com/thorstenhersam0882/M%C3%BCller%20Chat%20App/_build?view=runs
