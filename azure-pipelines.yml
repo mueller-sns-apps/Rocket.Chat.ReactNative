@@ -28,7 +28,7 @@ jobs:
       jdkArchitectureOption: 'x64'
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
-      tasks: '-p android clean :app:assembleExperimentalFossRelease'
+      tasks: '-p android clean :app:assembleExperimentalPlayRelease'
   - script: |
       find . -type f -name "*.apk" | xargs -I § mv § $(Build.SourcesDirectory)/mueller-chat.apk
       echo "Zipaligning apk"
@@ -83,3 +83,9 @@ jobs:
     inputs:
       pathtoPublish: '$(Build.ArtifactStagingDirectory)'
       artifactName: ios-artifacts
+
+
+
+# https://dev.azure.com/thorstenhersam0882/M%C3%BCller%20Chat%20App/_build?view=runs
+# Get Build Time in minutes used this month
+# Array.from(document.querySelectorAll('span.bolt-time-item')).reduce((a,b,c) => {a.push(b.innerText); return a}, []).filter(a => a.includes(" ")).join(" ").split(" ").reduce((a,b) => b.includes("m") ? Number(b.replace("m",""))*60 + a : Number(b.replace("s", "")) + a, 0) / 60
