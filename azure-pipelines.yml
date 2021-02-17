@@ -16,6 +16,8 @@ jobs:
   - script: |
       cp $(keyStore.secureFilePath) $(Build.SourcesDirectory)/android/app/my-upload-key.keystore
       ls -la ./android/app/
+      cd ./android/app/
+      keytool -list -keystore ./my-upload-key.keystore -storepass 4DCbDDqYPeKvk8F4A
   - script: yarn install
   - task: Gradle@2
     displayName: "Build apk"
