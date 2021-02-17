@@ -17,7 +17,6 @@ jobs:
       cp $(keyStore.secureFilePath) $(Build.SourcesDirectory)/android/app/my-upload-key.keystore
       ls -la ./android/app/
       cd ./android/app/
-      keytool -list -keystore ./my-upload-key.keystore -storepass 4DCbDDqYPeKvk8F4A
   - script: yarn install
   - task: Gradle@2
     displayName: "Build apk"
@@ -38,7 +37,7 @@ jobs:
       echo "Verifying zipaligning apk"
       $ANDROID_HOME/build-tools/30.0.3/zipalign -c 4 $(Build.SourcesDirectory)/mueller-chat.aligned.apk
       echo "Signing apk"
-      java -jar $ANDROID_HOME/build-tools/30.0.3/lib/apksigner.jar sign --out $(Build.SourcesDirectory)/mueller-chat.signed.apk --ks $(Build.SourcesDirectory)/android/app/my-upload-key.keystore --ks-key-alias my-key-alias --ks-pass pass:sunshine --key-pass pass:sunshine $(Build.SourcesDirectory)/mueller-chat.aligned.apk
+      java -jar $ANDROID_HOME/build-tools/30.0.3/lib/apksigner.jar sign --out $(Build.SourcesDirectory)/mueller-chat.signed.apk --ks $(Build.SourcesDirectory)/android/app/my-upload-key.keystore --ks-key-alias my-key-alias --ks-pass pass:4DCbDDqYPeKvk8F4A --key-pass pass:4DCbDDqYPeKvk8F4A $(Build.SourcesDirectory)/mueller-chat.aligned.apk
       echo "Verifying sgining apk"
       java -jar $ANDROID_HOME/build-tools/30.0.3/lib/apksigner.jar verify $(Build.SourcesDirectory)/mueller-chat.signed.apk
   - task: CopyFiles@2
