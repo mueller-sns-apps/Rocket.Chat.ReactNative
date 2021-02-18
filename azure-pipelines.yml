@@ -30,16 +30,6 @@ jobs:
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
       tasks: '-p android clean :app:assembleExperimentalPlayRelease'
-  - script: |
-      find . -type f -name "*.apk" | xargs -I § mv § $(Build.SourcesDirectory)/mueller-chat.apk
-      echo "Zipaligning apk"
-      $ANDROID_HOME/build-tools/30.0.3/zipalign -p 4 $(Build.SourcesDirectory)/mueller-chat.apk $(Build.SourcesDirectory)/mueller-chat.aligned.apk
-      echo "Verifying zipaligning apk"
-      $ANDROID_HOME/build-tools/30.0.3/zipalign -c 4 $(Build.SourcesDirectory)/mueller-chat.aligned.apk
-      echo "Signing apk"
-      java -jar $ANDROID_HOME/build-tools/30.0.3/lib/apksigner.jar sign --out $(Build.SourcesDirectory)/mueller-chat.signed.apk --ks $(Build.SourcesDirectory)/android/app/my-upload-key.keystore --ks-key-alias my-key-alias --ks-pass pass:4DCbDDqYPeKvk8F4A --key-pass pass:4DCbDDqYPeKvk8F4A $(Build.SourcesDirectory)/mueller-chat.aligned.apk
-      echo "Verifying sgining apk"
-      java -jar $ANDROID_HOME/build-tools/30.0.3/lib/apksigner.jar verify $(Build.SourcesDirectory)/mueller-chat.signed.apk
   - task: CopyFiles@2
     displayName: "Copy apk to build artifacts folder."
     inputs:
