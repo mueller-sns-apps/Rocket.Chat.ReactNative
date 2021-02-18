@@ -34,7 +34,7 @@ jobs:
     displayName: "Copy apk to build artifacts folder."
     inputs:
       SourceFolder: $(Build.SourcesDirectory)
-      contents: '**/*.signed.apk'
+      contents: '**/*.apk'
       targetFolder: '$(Build.artifactStagingDirectory)'
       overWrite: true
   - task: PublishBuildArtifacts@1
