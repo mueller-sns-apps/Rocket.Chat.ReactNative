@@ -30,6 +30,8 @@ jobs:
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
       tasks: '-p android clean :app:assembleExperimentalPlayRelease'
+  - script: |
+      find . -type f -name "app-experimental-play-release.apk" | xargs -I § mv § $(Build.SourcesDirectory)/mueller-chat.apk
   - task: CopyFiles@2
     displayName: "Copy apk to build artifacts folder."
     inputs:
