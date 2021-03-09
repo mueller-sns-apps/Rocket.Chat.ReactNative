@@ -45,12 +45,6 @@ jobs:
     inputs:
       pathtoPublish: '$(Build.ArtifactStagingDirectory)'
       artifactName: android-artifacts
-  - task: ms-vsclient.google-play.google-play-release.GooglePlayRelease@3
-    displayName: 'Publish on GooglePlay'
-    inputs:
-      serviceConnection: 'Azure DevOps to GooglePlay'
-      apkFile: '$(System.DefaultWorkingDirectory)/mueller-chat.apk'
-      track: production
 
 #- job:
 #  displayName: "Build iOS App"
