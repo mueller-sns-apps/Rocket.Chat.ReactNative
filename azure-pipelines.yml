@@ -16,7 +16,7 @@ jobs:
   - script: |
       cp $(keyStore.secureFilePath) $(Build.SourcesDirectory)/android/app/my-upload-key.keystore
       ls -la ./android/app/
-      cd ./android/app/
+      echo "Build number is: $Build.BuildNumber"
   - script: yarn install
   - task: Gradle@2
     displayName: "Build apk"
