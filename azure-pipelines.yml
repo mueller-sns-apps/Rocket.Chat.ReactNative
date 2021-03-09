@@ -16,8 +16,8 @@ jobs:
   - script: |
       cp $(keyStore.secureFilePath) $(Build.SourcesDirectory)/android/app/my-upload-key.keystore
       ls -la ./android/app/
-      echo "Build number is: $BUILD_BUILDID"
-      sed -i -e 's/VERSIONCODE=.*/VERSIONCODE='$BUILD_BUILDNUMBER'/g' $(Build.SourcesDirectory)/android/gradle.properties
+      echo "Build id is: $BUILD_BUILDID"
+      sed -i -e 's/VERSIONCODE=.*/VERSIONCODE='$BUILD_BUILDID'/g' $(Build.SourcesDirectory)/android/gradle.properties
       cat $(Build.SourcesDirectory)/android/gradle.properties
   - script: yarn install
   - task: Gradle@2
@@ -45,6 +45,13 @@ jobs:
     inputs:
       pathtoPublish: '$(Build.ArtifactStagingDirectory)'
       artifactName: android-artifacts
+  - task: ms-vsclient.google-play.google-play-release.GooglePlayRelease@3
+    displayName: 'Publish on GooglePlay'
+    inputs:
+      serviceConnection: 'Azure DevOps to GooglePlay'
+      apkFile: '$(System.DefaultWorkingDirectory)/mueller-chat.apk'
+      track: production
+
 #- job:
 #  displayName: "Build iOS App"
 #  steps:
